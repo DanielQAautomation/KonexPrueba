@@ -1,0 +1,69 @@
+group 'com.konexinnovation'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'java-library'
+apply plugin: 'idea'
+apply plugin: 'net.serenity-bdd.aggregator'
+//apply plugin: 'org.sonarqube'
+
+repositories {
+    mavenCentral()
+}
+
+tasks.withType(JavaCompile) {
+    options.compilerArgs += ['--add-opens', 'java.base/java.lang=ALL-UNNAMED']
+}
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("net.serenity-bdd:serenity-gradle-plugin:2.3.12")
+       // classpath("org.sonarsource.scanner.gradle:sonarqube-gradle-plugin:4.0.0.2929")
+        classpath("net.serenity-bdd:serenity-single-page-report:2.3.12")
+    }
+}
+
+serenity {
+    reports = ["single-page-html"]
+}
+
+ext {
+    serenityVersion = '2.3.12'
+    serenityCucumberVersion = '2.3.12'
+    apachePoiVersion = '5.2.3'
+    jacksonVersion = '2.15.2'
+}
+
+compileJava.options.encoding = "UTF-8"
+compileTestJava.options.encoding = "UTF-8"
+
+dependencies {
+    implementation "net.serenity-bdd:serenity-core:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-junit:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-screenplay:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-screenplay-webdriver:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-single-page-report:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-assertions:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-ensure:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-screenplay-rest:$serenityVersion"
+    implementation "net.serenity-bdd:serenity-cucumber6:$serenityCucumberVersion"
+
+    implementation "com.sikulix:sikulixapi:2.0.4"
+    implementation "org.apache.poi:poi-ooxml:$apachePoiVersion"
+    implementation "com.oracle.database.jdbc:ojdbc10:19.11.0.0"
+    implementation "com.ibm.mq:com.ibm.mq.allclient:9.1.1.0"
+
+    implementation "com.fasterxml.jackson.core:jackson-databind:$jacksonVersion"
+    implementation "com.fasterxml.jackson.datatype:jackson-datatype-jsr310:$jacksonVersion"
+    implementation "com.fasterxml.jackson.dataformat:jackson-dataformat-xml:$jacksonVersion"
+
+    implementation "com.google.code.gson:gson:2.8.9"
+    implementation "com.beust:jcommander:1.81"
+
+    testImplementation "junit:junit:4.13.2"
+}
+
+gradle.startParameter.continueOnFailure = true
